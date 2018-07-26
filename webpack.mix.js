@@ -15,15 +15,20 @@ module.exports = function (mix) {
 
     mix.babel([
             'vendor/arbory/arbory/resources/assets/js/environment.js',
-            'vendor/components/jquery/jquery.min.js',
-            'vendor/components/jqueryui/jquery-ui.min.js',
-            'vendor/components/jquery-cookie/jquery.cookie.js',
-            'vendor/ckeditor/ckeditor/ckeditor.js',
-            'vendor/ckeditor/ckeditor/adapters/jquery.js',
-            'vendor/arbory/arbory/resources/assets/js/include/**/*.js',
+            'vendor/arbory/arbory/resources/assets/js/include/**/*.js'
         ],
         'public/arbory/js/application.js'
     );
+
+    mix.scripts([
+        'vendor/arbory/arbory/resources/assets/js/environment.js',
+        'vendor/components/jquery/jquery.min.js',
+        'vendor/ckeditor/ckeditor/ckeditor.js',
+        'vendor/ckeditor/ckeditor/adapters/jquery.js',
+        'vendor/arbory/arbory/resources/assets/vendor/core_ui/js/coreui.js',
+        'vendor/arbory/arbory/resources/assets/vendor/core_ui/js/coreui-utilities.js',
+        'vendor/arbory/arbory/resources/assets/vendor/build-url/build-url.min.js',
+    ],'public/arbory/js/dependencies.js');
 
     mix.sass(
         'vendor/arbory/arbory/resources/assets/stylesheets/application.scss',
@@ -38,6 +43,11 @@ module.exports = function (mix) {
     mix.sass(
         'vendor/arbory/arbory/resources/assets/stylesheets/controllers/sessions.scss',
         'css/controllers/'
+    );
+
+    mix.copyDirectory(
+        'vendor/arbory/arbory/resources/assets/vendor/core_ui/',
+        'public/arbory/vendor/core_ui/'
     );
 
     mix.copyDirectory(
@@ -60,10 +70,5 @@ module.exports = function (mix) {
         'public/arbory/laravel-filemanager/'
     );
 
-    mix.version([
-        'public/arbory/ckeditor/',
-        'public/arbory/ckeditor/plugins/',
-        'public/arbory/images/',
-        'public/arbory/laravel-filemanager/'
-    ]);
+    mix.version();
 };

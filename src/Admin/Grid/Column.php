@@ -203,25 +203,15 @@ class Column
      * @param Model $model
      * @return Element
      */
-    public function callDisplayCallback( Model $model )
+    public function callDisplayCallback(Model $model)
     {
-        $value = $this->getValue( $model );
+        $value = $this->getValue($model);
 
-        if( $this->displayer === null )
-        {
-            $value = (string) $value;
-
-            if( $this->grid->hasTool( 'create' ) )
-            {
-                return Html::link( $value )->addAttributes( [
-                    'href' => $this->grid->getModule()->url( 'edit', [ $model->getKey() ] )
-                ] );
-            }
-
-            return Html::span( $value );
+        if ($this->displayer === null) {
+            return (string)$value;
         }
 
-        return call_user_func_array( $this->displayer, [ $value, $this, $model ] );
+        return call_user_func_array($this->displayer, [$value, $this, $model]);
     }
 
     /**

@@ -6,8 +6,6 @@ use Arbory\Base\Admin\Widgets\Breadcrumbs;
 use Arbory\Base\Admin\Widgets\SearchField;
 use Arbory\Base\Html\Html;
 use Arbory\Base\Http\Requests\TranslationStoreRequest;
-use Arbory\Base\Menu\Menu;
-use Arbory\Base\Services\ModuleRegistry;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Query\Builder;
@@ -116,17 +114,21 @@ class TranslationsController extends Controller
 
         $paginatedItems = $this->getPaginatedItems( $translationsQuery );
 
+
+
         return view(
             'arbory::controllers.translations.index',
             [
-                'header' => Html::header( [ $this->getIndexBreadcrumbs(), ( new SearchField( '' ) )->render() ] ),
+                'breadcrumbs' => $this->getIndexBreadcrumbs(),
+                'searchField' => new SearchField(''),
                 'languages' => $languages,
                 'translations' => $paginatedItems,
                 'paginator' => $paginatedItems,
-                'search' => $request->get( 'search' ),
-                'highlight' => function ( $text ) use ( $searchString )
-                {
-                    return str_replace( $searchString, '<span style="background-color: lime; font-weight:bold">' . htmlentities( $searchString ) . '</span>', htmlentities( $text ) );
+                'search' => $request->get('search'),
+                'highlight' => function ($text) use ($searchString) {
+                    return str_replace($searchString,
+                        '<span style="background-color: lime; font-weight:bold">' . htmlentities($searchString) . '</span>',
+                        htmlentities($text));
                 }
             ]
         );

@@ -36,6 +36,14 @@ class ToolboxMenu implements Renderable
     }
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->render();
+    }
+
+    /**
      * @return Model
      */
     public function model()
@@ -74,14 +82,9 @@ class ToolboxMenu implements Renderable
 
         foreach( $this->items() as $item )
         {
-            $link = Html::link( $item->getTitle() )
-                ->addClass( 'button ' . $item->getClass() )
-                ->addAttributes( [
-                    'href' => $item->getUrl(),
-                    'title' => $item->getTitle(),
-                ] );
 
-            $content->push( Html::li( $link ) );
+
+            $content->push( $item );
         }
 
         return (string) $content;

@@ -2,7 +2,6 @@
 
 namespace Arbory\Base\Admin\Form\Fields;
 
-use Arbory\Base\Html\Elements\Content;
 use Arbory\Base\Html\Elements\Inputs\Input;
 use Arbory\Base\Html\Html;
 use Illuminate\Http\Request;
@@ -14,24 +13,20 @@ use Illuminate\Http\Request;
 class Password extends AbstractField
 {
     /**
-     * @return Content
-     * @throws \Arbory\Base\Exceptions\BadMethodCallException
+     * @return \Arbory\Base\Html\Elements\Element|string
      */
     public function render()
     {
         $input = new Input;
-        $input->setName( $this->getNameSpacedName() );
-        $input->setType( 'password' );
-        $input->addClass( 'text' );
+        $input->setName($this->getNameSpacedName());
+        $input->setType('password');
+        $input->addClass('text');
 
-        $content = new Content;
-
-        $content->push( Html::div()
-            ->append( Html::div( $input->getLabel( $this->getLabel() ) )->addClass( 'label-wrap' ) )
-            ->append( Html::div( $input )->addClass( 'value' ) )
-            ->addClass( 'field type-password' ) );
-
-        return $content;
+        return Html::div([
+            $input->getLabel($this->getLabel()),
+            $input->addClass('form-control')
+        ])
+            ->addClass('form-group field type-password');
     }
 
     /**

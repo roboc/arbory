@@ -1,3 +1,3 @@
-<section class="dialog @if($class){{$class}}@endif ">
+<div class="modal-content {{$class ?? ''}}">
     @yield('dialog')
-</section>
+</div>

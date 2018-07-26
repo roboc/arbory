@@ -65,9 +65,9 @@ jQuery(document).ready(function()
          });
     });
 
-    body.on('contentloaded', function(e)
-    {
-        jQuery(e.target).trigger('calendarsinit');
-    });
+    // body.on('contentloaded', function(e)
+    // {
+    //     jQuery(e.target).trigger('calendarsinit');
+    // });
 
 });

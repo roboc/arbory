@@ -45,7 +45,7 @@ class Menu
      */
     public function render()
     {
-        $list = Html::ul()->addClass( 'block' );
+        $list = Html::ul()->addClass( 'nav' );
 
         foreach( $this->getItems() as $item )
         {
@@ -64,6 +64,7 @@ class Menu
             }
 
             $li = Html::li()
+                ->addClass( 'nav-item' )
                 ->addAttributes( [ 'data-name' => $name ] );
 
             if ( $item->isAccessible() )

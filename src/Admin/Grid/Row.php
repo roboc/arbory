@@ -3,7 +3,7 @@
 namespace Arbory\Base\Admin\Grid;
 
 use Arbory\Base\Admin\Grid;
-use Arbory\Base\Admin\Tools\Toolbox;
+use Arbory\Base\Admin\Tools\ToolboxMenu;
 use Arbory\Base\Html\Elements\Element;
 use Arbory\Base\Html\Html;
 use Illuminate\Contracts\Support\Renderable;
@@ -62,19 +62,20 @@ class Row implements Renderable
     {
         $cells = $this->getCells();
 
+        $tools = new ToolboxMenu( $this->getModel() );
+        $actionsDefinition = $this->getGrid()->getRowActions();
+        $actionsDefinition( $tools );
+
         $cells->push(
             Html::td(
-                Toolbox::create(
-                    $this->grid->getModule()->url( 'dialog', [ 'dialog' => 'toolbox', 'id' => $this->model->getKey() ] )
-                )->render()
+                $tools
             )->addClass( 'only-icon toolbox-cell' )
         );
 
         return Html::tr( $cells->toArray() )
             ->addAttributes( [
                 'data-id' => $this->model->getKey(),
-            ] )
-            ->addClass( 'row' );
+            ] );
     }
 
     /**

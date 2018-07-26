@@ -34,16 +34,16 @@ class Item extends AbstractItem
      * @return Elements\Element
      * @throws \InvalidArgumentException
      */
-    public function render( Elements\Element $parentElement ): Elements\Element
+    public function render(Elements\Element $parentElement): Elements\Element
     {
         return
             $parentElement->append(
                 Html::link([
-                    Html::abbr( $this->getAbbreviation() )->addAttributes( [ 'title' => $this->getTitle() ] ),
-                    Html::span( $this->getTitle() )->addClass( 'name' )
+                    Html::i()->addClass('nav-icon fa fa-file-o'),
+                    $this->getTitle()
                 ])
-                    ->addClass( 'trigger ' . ( $this->isActive() ? 'active' : '' ) )
-                    ->addAttributes( [ 'href' => $this->getUrl() ] )
+                    ->addClass('nav-link ' . ($this->isActive() ? 'active' : ''))
+                    ->addAttributes(['href' => $this->getUrl()])
             );
     }
 

@@ -2,16 +2,11 @@
 
 .controller-nodes
 {
-    main > section:not(.dialog) > .body:not(.empty)
-    {
-        border-bottom: none;
-    }
-
     .collection
     {
         ul
         {
-            @include block-list;
+            //@include block-list;
 
             background-color: white;
         }
@@ -23,7 +18,7 @@
 
         li
         {
-            @include clear-inside;
+            //@include clear-inside;
         }
 
         .collapser-cell
@@ -129,66 +124,9 @@
         min-width: steps(40);
     }
 
-
-    .dialog
-    {
-        width: steps(40);
-
-        &.content-type
-        {
-            &[data-columns="1"]
-            {
-                width: steps(24);
-            }
-
-            .body
-            {
-                padding: steps(2) steps(3);
-                text-align: center;
-
-                .description
-                {
-                    padding: 0 0 steps(2) 0;
-                }
-
-                ul
-                {
-                    text-align: left;
-                    margin-left: steps(2);
-                }
-            }
-
-            .content-types
-            {
-                @include clear-inside;
-
-                ul
-                {
-                    @include block-list;
-
-                    li
-                    {
-                        width: steps(16);
-                        float: left;
-                        margin-bottom: steps(1);
-                    }
-                }
-            }
-        }
-
-        &:not(.content-type)
-        {
-            .body
-            {
-                height: steps(24);
-                overflow-y: auto;
-            }
-        }
-    }
-
     &.view-edit
     {
-        @include clear-inside;
+        //@include clear-inside;
 
         background: $color-background-lighter;
 

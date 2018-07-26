@@ -20,7 +20,7 @@ class InputFieldRenderer extends BaseRenderer
         return Html::input()
             ->setName( $this->field->getNameSpacedName() )
             ->setValue( $this->field->getValue() )
-            ->addClass( 'text' );
+            ->addClass( 'form-control' );
     }
 
     /**

@@ -5,8 +5,6 @@ namespace Arbory\Base\Admin\Form;
 use Arbory\Base\Admin\Form;
 use Arbory\Base\Admin\Widgets\Button;
 use Arbory\Base\Admin\Widgets\Link;
-use Arbory\Base\Admin\Tools\Toolbox;
-use Arbory\Base\Html\Elements\Content;
 use Arbory\Base\Html\Elements\Element;
 use Arbory\Base\Html\Html;
 use Illuminate\Contracts\Support\Renderable;
@@ -46,19 +44,7 @@ class Builder implements Renderable
      */
     protected function header()
     {
-        $toolbox = null;
-
-        if( $this->form->getModel()->getKey() )
-        {
-            $toolbox = Toolbox::create(
-                $this->url( 'dialog', [ 'dialog' => 'toolbox', 'id' => $this->form->getModel()->getKey() ] )
-            )->render();
-        }
-
-        return Html::header( [
-            Html::h1( $this->form->getTitle() ),
-            Html::div( $toolbox )->addClass( 'extras toolbox-wrap' )
-        ] );
+        return Html::header($this->form->getTitle());
     }
 
     /**
@@ -66,8 +52,8 @@ class Builder implements Renderable
      */
     protected function footer()
     {
-        $primary = Html::div()->addClass( 'primary' );
-        $secondary = Html::div()->addClass( 'secondary' );
+        $primary = Html::div()->addClass( 'col-md-6 text-right' );
+        $secondary = Html::div()->addClass( 'col-md-6' );
 
         $primary->append(
             Button::create( 'save_and_return', true )
@@ -93,17 +79,18 @@ class Builder implements Renderable
         );
 
         $footerTools = Html::div( [
+            $secondary,
             $primary,
-            $secondary
-        ] )->addClass( 'tools' );
+        ] )->addClass( 'row' );
 
-        return Html::footer( $footerTools )->addClass( 'main' );
+        return Html::div( $footerTools )->addClass( 'container' );
     }
 
     /**
+     * @param $content
      * @return Element
      */
-    protected function form()
+    protected function form( $content )
     {
         $form = Html::form()->addAttributes( [
             'id' => 'edit-resource',
@@ -125,29 +112,11 @@ class Builder implements Renderable
             $form->append( Html::input()->setName( '_method' )->setType( 'hidden' )->setValue( 'PUT' ) );
         }
 
+        $form->append($content);
+
         return $form;
     }
 
-    /**
-     * @return \Arbory\Base\Admin\Widgets\Breadcrumbs
-     */
-    protected function breadcrumbs()
-    {
-        $breadcrumbs = $this->form->getModule()->breadcrumbs();
-
-        $breadcrumbs->addItem(
-            $this->form->getTitle(),
-            $this->form->getModel()->getKey()
-                ? $this->form->getModule()->url( 'edit', $this->form->getModel()->getKey() )
-                : $this->form->getModule()->url( 'create' )
-        );
-
-        return $breadcrumbs;
-    }
-
-    /**
-     * @return Content
-     */
     public function render()
     {
         $content = Html::div()->addClass( 'body' );
@@ -157,17 +126,13 @@ class Builder implements Renderable
             $content->append( $field->render() );
         }
 
-        return new Content( [
-            Html::header( [
-                $this->breadcrumbs(),
-            ] ),
-            Html::section(
-                $this->form()
-                    ->append( $this->header() )
-                    ->append( $content )
-                    ->append( $this->footer() )
-            )
-        ] );
+        return $this->form(
+            Html::div([
+                Html::div($this->header())->addClass('card-header'),
+                Html::div($content)->addClass('card-body'),
+                Html::div($this->footer())->addClass('card-footer'),
+            ])->addClass('card')
+        );
     }
 
 }

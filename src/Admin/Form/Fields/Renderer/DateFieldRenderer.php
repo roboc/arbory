@@ -18,14 +18,13 @@ class DateFieldRenderer extends InputFieldRenderer
     {
         $value = $this->field->getValue();
 
-        if( !$value )
-        {
-            $value = date( 'Y-m-d H:i' );
+        if (!$value) {
+            $value = date('Y-m-d H:i');
         }
 
         return Html::input()
-            ->setName( $this->field->getNameSpacedName() )
-            ->setValue( date( 'Y-m-d H:i', strtotime( $value ) ) )
-            ->addClass( 'text datetime-picker' );
+            ->setName($this->field->getNameSpacedName())
+            ->setValue(date('Y-m-d H:i', strtotime($value)))
+            ->addClass('text datetime-picker');
     }
 }

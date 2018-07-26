@@ -23,6 +23,7 @@ class TextareaFieldRenderer extends InputFieldRenderer
     {
         $textarea = Html::textarea( $this->field->getValue() );
         $textarea->setName( $this->field->getNameSpacedName() );
+        $textarea->addClass('form-control');
         $textarea->addAttributes( [
             'rows' => 5,
             'cols' => 50,

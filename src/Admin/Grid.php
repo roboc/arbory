@@ -125,6 +125,18 @@ class Grid
         return $this->filter;
     }
 
+    public function rowActions(Closure $actions)
+    {
+        $this->rowActions = $actions;
+
+        return $this;
+    }
+
+    public function getRowActions()
+    {
+        return $this->rowActions;
+    }
+
     /**
      * @param RenderableInterface $tool
      * @param string|null $side

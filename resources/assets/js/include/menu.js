@@ -1,4 +1,3 @@
-
 const COOKIE_NAME_MENU = 'menu';
 const SELECTOR_MENU_ITEM = 'li[data-name]';
 
@@ -68,7 +67,7 @@ class MenuItem {
         if (this.menu.isCompact()) {
             this.menu.collapseItems();
         }
-        
+
         this.isCollapsed() ? this.expandItems() : this.collapseItems();
     }
 

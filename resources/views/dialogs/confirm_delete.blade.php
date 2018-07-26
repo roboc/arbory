@@ -3,21 +3,19 @@
     'form_action' => 'delete'
 ])
 
-@section('dialog.header')
-    <h1>@lang('Confirm deletion')</h1>
+@section('dialog.title')
+    @lang('Confirm deletion')
 @stop
 
 @section('dialog.body')
-    <i class="fa fa-trash-o"></i>
-    <div class="question">@lang('Do you want to delete the following object?')</div>
-    <div class="description">{{$object_name}}</div>
+    <div class="confirmation">
+        <i class="fa fa-trash-o"></i>
+        <div class="question text-center h5">@lang('Do you want to delete the following object?')</div>
+        <div class="description text-center text-primary">{{$object_name}}</div>
+    </div>
 @stop
 
 @section('dialog.tools.primary')
-    <a class="button with-icon secondary" title="No" data-type="cancel" href="{{$list_url}}">
-        <i class="fa fa-ban"></i>@lang('No')
-    </a>
-    <button class="button with-icon danger" title="Yes" type="submit">
-        <i class="fa fa-check"></i>@lang('Yes')
-    </button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-ban"></i> @lang('No')</button>
+    <button type="submit" class="btn btn-danger"><i class="fa fa-check"></i> @lang('Yes')</button>
 @stop

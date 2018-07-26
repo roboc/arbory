@@ -146,10 +146,14 @@ class Renderer implements Renderable
      */
     protected function footer()
     {
-        $createButton = Link::create( $this->url( 'dialog', 'content_types' ) )
-            ->asButton( 'primary ajaxbox' )
-            ->withIcon( 'plus' )
-            ->title( trans( 'arbory::resources.create_new' ) );
+        $createButton = Html::button(trans('arbory::resources.create_new'))
+            ->addAttributes([
+                'type' => 'button',
+                'data-toggle' => 'modal',
+                'data-target' => '#arbory-modal',
+                'data-remote' => $this->url('dialog', 'content_types'),
+            ])
+            ->addClass('btn btn-primary');
 
         $tools = new Tools();
 

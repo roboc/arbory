@@ -27,12 +27,14 @@ class Group extends AbstractItem
      */
     public function render( Elements\Element $parentElement ): Elements\Element
     {
-        $ul = Html::ul()->addClass( 'block' );
+        $ul = Html::ul()->addClass( 'nav-dropdown-items' );
 
         foreach( $this->getChildren() as $child )
         {
             /** @var AbstractItem $child */
-            $li = Html::li()->addAttributes( [ 'data-name' => snake_case( $child->getTitle() ) ] );
+            $li = Html::li()
+                ->addClass('nav-item')
+                ->addAttributes( [ 'data-name' => snake_case( $child->getTitle() ) ] );
 
             if( $child->isAccessible() )
             {
@@ -47,16 +49,17 @@ class Group extends AbstractItem
             }
         }
 
+        $parentElement->addClass('nav-dropdown');
+
         return
             $parentElement
                 ->append(
-                    Html::span( [
-                        Html::abbr( $this->getAbbreviation() )->addAttributes( [ 'title' => $this->getTitle() ] ),
-                        Html::span( $this->getTitle() )->addClass( 'name' ),
-                        Html::span( Html::button( Html::i()->addClass( 'fa fa-chevron-up' ) )->addAttributes( [ 'type' => 'button' ] ) )->addClass( 'collapser' ),
-                    ] )->addClass( 'trigger ' . ( $this->isActive() ? 'active' : '' ) )
+                    Html::link([
+                        Html::i()->addClass('nav-icon fa fa-folder-o'),
+                        $this->getTitle(),
+                    ])->addClass('nav-link nav-dropdown-toggle ' . ($this->isActive() ? 'active' : ''))
                 )
-                ->append( $ul );
+                ->append($ul);
     }
 
     /**

@@ -5,12 +5,13 @@ namespace Arbory\Base\Admin\Form\Fields\Renderer;
 use Arbory\Base\Admin\Form\Fields\FieldInterface;
 use Arbory\Base\Html\Elements\Element;
 use Arbory\Base\Html\Html;
+use Illuminate\Contracts\Support\Renderable;
 
 /**
  * Class BaseRenderer
  * @package Arbory\Base\Admin\Form\Fields\Renderer
  */
-abstract class BaseRenderer
+abstract class BaseRenderer implements Renderable
 {
     /**
      * @var FieldInterface
@@ -26,7 +27,7 @@ abstract class BaseRenderer
      * InputFieldRenderer constructor.
      * @param FieldInterface $field
      */
-    public function __construct( FieldInterface $field )
+    public function __construct(FieldInterface $field)
     {
         $this->field = $field;
     }
@@ -44,7 +45,7 @@ abstract class BaseRenderer
      */
     protected function getLabel()
     {
-        return Html::label( $this->field->getLabel() );
+        return Html::label($this->field->getLabel());
     }
 
     /**
@@ -54,25 +55,23 @@ abstract class BaseRenderer
 
     /**
      * @param Element|null $label
-     * @param Element|null $value
+     * @param Element|null $input
      * @return Element
      */
-    protected function buildField( Element $label = null, Element $value = null )
+    protected function buildField(Element $label = null, Element $input = null)
     {
         $template = Html::div()
-            ->addClass( 'field type-' . $this->getFieldType() )
-            ->addAttributes( [
+            ->addClass('form-group field type-' . $this->getFieldType())
+            ->addAttributes([
                 'data-name' => $this->field->getName()
-            ] );
+            ]);
 
-        if( $label )
-        {
-            $template->append( Html::div( $label )->addClass( 'label-wrap' ) );
+        if ($label) {
+            $template->append($label);
         }
 
-        if( $value )
-        {
-            $template->append( Html::div( $value )->addClass( 'value' ) );
+        if ($input) {
+            $template->append($input);
         }
 
         return $template;
@@ -83,6 +82,6 @@ abstract class BaseRenderer
      */
     public function render()
     {
-        return $this->buildField( $this->getLabel(), $this->getInput() );
+        return $this->buildField($this->getLabel(), $this->getInput());
     }
 }

@@ -1,13 +1,17 @@
-
-jQuery(function()
-{
+jQuery(function () {
     var body = jQuery('body');
+    var modal = body.find('#arbory-modal');
 
-    body.on('contentdone', function( e )
-    {
-        jQuery(e.target).find(".dialog").addBack('.dialog').addClass('initialized');
+    modal.on('show.bs.modal', function (e) {
+        var button = jQuery(e.relatedTarget);
+        var modal = jQuery(this);
+
+        modal.find('.modal-dialog').load(button.data('remote'));
     });
 
+    modal.on('hidden.bs.modal', function () {
+        var modal = jQuery(this);
+
+        modal.find('.modal-content').empty();
+    });
 });
-
-

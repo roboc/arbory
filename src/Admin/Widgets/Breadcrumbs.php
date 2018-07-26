@@ -54,27 +54,15 @@ class Breadcrumbs implements Renderable
      */
     public function render()
     {
-        $total = $this->items->count();
-
-        $list = $this->items->map( function ( array $item, $key ) use ( $total )
-        {
-            $listItem = Html::li(
-                Html::link( $item['title'] )
-                    ->addAttributes( [
+        $list = $this->items->map(function (array $item) {
+            return Html::li(
+                Html::link($item['title'])
+                    ->addAttributes([
                         'href' => $item['url']
-                    ] )
-            );
+                    ])
+            )->addClass('breadcrumb-item');
+        });
 
-            if( $key !== $total - 1 )
-            {
-                $listItem->append( Html::i()->addClass( 'fa fa-small fa-chevron-right' ) );
-            }
-
-            return $listItem;
-        } );
-
-        return Html::nav(
-            Html::ul( $list->toArray() )->addClass( 'block breadcrumbs' )
-        );
+        return Html::ol($list->toArray())->addClass('breadcrumb');
     }
 }

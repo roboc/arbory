@@ -6,6 +6,7 @@ use Arbory\Base\Admin\Admin;
 use Arbory\Base\Admin\Form;
 use Arbory\Base\Admin\Grid;
 use Arbory\Base\Admin\Traits\Crudify;
+use Arbory\Base\Html\Elements\Content;
 use Arbory\Base\Html\Html;
 use Arbory\Base\Auth\Users\User;
 use Illuminate\Http\Request;
@@ -116,10 +117,10 @@ class UsersController extends Controller
             $grid->column('last_name');
             $grid->column('roles.name')
                 ->display(function (Collection $value) {
-                    return Html::ul(
+                    return new Content(
                         $value->map(function ($role) {
-                            return Html::li((string)$role);
-                        })->toArray()
+                            return Html::span((string)$role)->addClass('badge badge-success');
+                        })
                     );
                 });
             $grid->column('last_login');

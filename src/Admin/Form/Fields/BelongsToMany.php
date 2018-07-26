@@ -5,7 +5,6 @@ namespace Arbory\Base\Admin\Form\Fields;
 use Arbory\Base\Admin\Form\Fields\Concerns\HasRelationships;
 use Arbory\Base\Html\Elements\Element;
 use Arbory\Base\Html\Html;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 /**
@@ -15,21 +14,6 @@ use Illuminate\Http\Request;
 class BelongsToMany extends AbstractField
 {
     use HasRelationships;
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        $list = Html::ul();
-
-        foreach( $this->getValue() as $item )
-        {
-            $list->append( Html::li( $item ) );
-        }
-
-        return (string) $list;
-    }
 
     /**
      * @return bool
@@ -55,12 +39,10 @@ class BelongsToMany extends AbstractField
         $relatedModel = $this->getRelatedModel();
         $checkboxes = $this->getRelatedModelOptions( $relatedModel );
 
-        $label = Html::label( $this->getLabel() )->addAttributes( [ 'for' => $this->getName() ] );
-
         return Html::div( [
-            Html::div( $label )->addClass( 'label-wrap' ),
+            Html::h3( $this->getLabel() )->addClass( 'label-wrap' ),
             Html::div( $checkboxes )->addClass( 'value' )
-        ] )->addClass( 'field type-associated-set' );
+        ] )->addClass( 'form-group field type-associated-set' );
     }
 
     /**
@@ -81,17 +63,19 @@ class BelongsToMany extends AbstractField
             ];
 
             $checkbox = Html::checkbox()
-                ->setName( implode( '.', $name ) )
-                ->setValue( 1 );
+                ->setName(implode('.', $name))
+                ->setValue(1)
+                ->addClass('form-check-input');
 
-            $checkbox->append( $checkbox->getLabel( (string) $modelOption ) );
-
-            if( in_array( $modelOption->getKey(), $selectedOptions, true ) )
+            if( \in_array( $modelOption->getKey(), $selectedOptions, true ) )
             {
                 $checkbox->select();
             }
 
-            $checkboxes[] = Html::div( $checkbox )->addClass( 'type-associated-set-item' );
+            $checkboxes[] = Html::div( [
+                $checkbox,
+                $checkbox->getLabel( (string) $modelOption )->addClass('form-check-label')
+            ] )->addClass( 'form-group form-check' );
         }
 
         return $checkboxes;

@@ -1,11 +1,6 @@
-<aside>
-    <div class="compacter">
-        <button class="button only-icon" title="Collapse" type="button" data-title-expand="Expand"
-                data-title-collapse="Collapse">
-            <i class="fa fa-angle-double-left"></i>
-        </button>
-    </div>
-    <nav>
+<div class="sidebar">
+    <nav class="sidebar-nav">
         {!! $menu !!}
     </nav>
-</aside>
+    <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+</div>

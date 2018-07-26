@@ -81,16 +81,16 @@ class AssociatedSetRenderer
      */
     protected function getAssociatedItem( $name, $value, $label )
     {
-        $checkbox = Html::checkbox( ( new Input )->setName( $name )->getLabel( $label ) );
-        $checkbox->setName( $name );
-        $checkbox->setValue( $value );
+        $checkbox = Html::checkbox()->setName( $name )->setValue( $value );
+        $checkbox->append($checkbox->getLabel($label)->addClass('form-check-label'));
+        $checkbox->addClass('form-check-input');
 
         if( in_array( $value, $this->values, true ) )
         {
             $checkbox->select();
         }
 
-        return Html::div( $checkbox )->addClass( 'type-associated-set-item' );
+        return Html::div( $checkbox )->addClass( 'form-check type-associated-set-item' );
     }
 
     /**
@@ -98,12 +98,9 @@ class AssociatedSetRenderer
      */
     public function render()
     {
-        $field = new FieldRenderer();
-        $field->setType( 'associated-set' );
-        $field->setName( $this->field->getName() );
-        $field->setLabel( $this->getLabel() );
-        $field->setValue( $this->getAssociatedItemsList() );
-
-        return $field->render();
+        return Html::div([
+            Html::h3($this->getLabel()),
+            Html::div($this->getAssociatedItemsList())
+        ])->addClass('field type-associated-set');
     }
 }

@@ -3,6 +3,7 @@
 namespace Arbory\Base\Admin\Form\Fields;
 
 use Arbory\Base\Admin\Form\FieldSet;
+use Arbory\Base\Auth\Users\User;
 use Arbory\Base\Html\Elements\Element;
 use Arbory\Base\Html\Html;
 use Arbory\Base\Nodes\Node;

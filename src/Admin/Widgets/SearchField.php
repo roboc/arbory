@@ -68,26 +68,24 @@ class SearchField implements Renderable
     public function render()
     {
         $searchInput = Html::input()
-            ->setName( $this->name )
-            ->setType( 'search' )
-            ->addClass( 'text' )
-            ->addAttributes( [ 'autofocus' => 'autofocus' ] )
-            ->setValue( request()->get( $this->name ) );
+            ->setName($this->name)
+            ->setType('search')
+            ->addClass('form-control')
+            ->setValue(request()->get($this->name));
 
-        $submitButton = Html::button( Html::i()->addClass( 'fa fa-search' ) )
-            ->addClass( 'button only-icon' )
-            ->addAttributes( [
+        $submitButton = Html::button(Html::i()->addClass('fa fa-search'))
+            ->addClass('btn btn-secondary')
+            ->addAttributes([
                 'type' => 'submit',
-                'title' => trans( 'arbory::filter.search' ),
+                'title' => trans('arbory::filter.search'),
                 'autocomplete' => 'off',
-            ] );
+            ]);
 
         return $this->createForm(
-            Html::div(
-                Html::div( [ $searchInput, $submitButton ] )
-                    ->addClass( 'search-field' )
-                    ->addAttributes( [ 'data-name' => 'search' ] )
-            )->addClass( 'text-search' )
+            Html::div([
+                $searchInput,
+                Html::span($submitButton)->addClass('input-group-append')
+            ])->addClass('input-group')
         );
     }
 }

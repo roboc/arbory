@@ -2,6 +2,8 @@
 
 namespace Arbory\Base\Admin\Tools;
 
+use Arbory\Base\Html\Html;
+
 /**
  * Class AbstractAction
  * @package Arbory\Base\Admin\Form\Fields\ToolboxActions
@@ -21,7 +23,14 @@ class ToolboxMenuItem
     /**
      * @var array
      */
-    protected $classes = [];
+    protected $classes = [
+        'btn'
+    ];
+
+    /**
+     * @var array
+     */
+    protected $attributes = [];
 
     /**
      * Item constructor.
@@ -32,6 +41,14 @@ class ToolboxMenuItem
     {
         $this->setTitle( $title );
         $this->setUrl( $url );
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->render();
     }
 
     /**
@@ -75,7 +92,7 @@ class ToolboxMenuItem
     /**
      * @return string
      */
-    public function getClass()
+    public function getClases()
     {
         return implode( ' ', $this->classes );
     }
@@ -85,7 +102,9 @@ class ToolboxMenuItem
      */
     public function dialog()
     {
-        $this->classes[] = 'ajaxbox';
+        $this->attributes['data-toggle'] = 'modal';
+        $this->attributes['data-target'] = '#arbory-modal';
+        $this->attributes['data-remote'] = $this->getUrl();
 
         return $this;
     }
@@ -98,5 +117,19 @@ class ToolboxMenuItem
         $this->classes[] = 'danger';
 
         return $this;
+    }
+
+    /**
+     * @return \Arbory\Base\Html\Elements\Element
+     */
+    public function render()
+    {
+        $this->classes[] = 'btn-secondary';
+        $this->attributes['href'] = $this->getUrl();
+        $this->attributes['title'] = $this->getTitle();
+
+        return Html::link($this->getTitle())
+            ->addClass($this->getClases())
+            ->addAttributes($this->attributes);
     }
 }

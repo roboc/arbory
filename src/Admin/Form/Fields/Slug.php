@@ -2,9 +2,9 @@
 
 namespace Arbory\Base\Admin\Form\Fields;
 
-use Arbory\Base\Admin\Widgets\Button;
 use Arbory\Base\Html\Elements\Element;
 use Arbory\Base\Html\Html;
+use Arbory\Base\Html\HtmlString;
 use Arbory\Base\Nodes\Node;
 use Arbory\Base\Repositories\NodesRepository;
 
@@ -29,12 +29,12 @@ class Slug extends AbstractField
      * @param string $fromFieldName
      * @param string $apiUrl
      */
-    public function __construct( $name, $fromFieldName, $apiUrl )
+    public function __construct($name, $fromFieldName, $apiUrl)
     {
         $this->apiUrl = $apiUrl;
         $this->fromFieldName = $fromFieldName;
 
-        parent::__construct( $name );
+        parent::__construct($name);
     }
 
     /**
@@ -42,32 +42,35 @@ class Slug extends AbstractField
      */
     public function render()
     {
-        $label = Html::label( $this->getLabel() )->addAttributes( [ 'for' => $this->getNameSpacedName() ] );
-
+        $label = Html::label($this->getLabel())->addAttributes(['for' => $this->getNameSpacedName()]);
         $input = Html::input()
-            ->setName( $this->getNameSpacedName() )
-            ->setValue( $this->getValue() )
-            ->addClass( 'text' )
-            ->addAttributes( [
+            ->setName($this->getNameSpacedName())
+            ->setValue($this->getValue())
+            ->addClass('form-control')
+            ->addAttributes([
                 'data-generator-url' => $this->getApiUrl(),
                 'data-from-field-name' => $this->getFromFieldName(),
                 'data-node-parent-id' => $this->getParentId(),
                 'data-model-table' => $this->getModel()->getTable(),
                 'data-object-id' => $this->getModel()->getKey()
-            ] );
+            ]);
 
-        $button = Button::create()
-            ->type( 'button', 'secondary generate' )
-            ->title( trans( 'arbory::fields.slug.suggest_slug' ) )
-            ->withIcon( 'keyboard-o' )
-            ->iconOnly()
-            ->render();
+        $button = Html::div(
+            Html::button(Html::i()->addClass('fa fa-keyboard-o'))
+                ->addClass('btn btn-secondary')
+                ->addAttributes(['type' => 'button'])
+        )->addClass('input-group-append');
 
-        return Html::div( [
-            Html::div( $label )->addClass( 'label-wrap' ),
-            Html::div( [ $input, $button ] )->addClass( 'value' ),
+        return Html::div([
+            $label,
+            Html::div([
+                $input,
+                $button
+            ])->addClass('input-group'),
             $this->getLinkElement(),
-        ] )->addClass( 'field type-slug' )->addAttributes( [ 'data-name' => 'slug' ] );
+        ])
+            ->addClass('form-group field type-slug')
+            ->addAttributes(['data-name' => $this->getName()]);
     }
 
     /**
@@ -75,16 +78,15 @@ class Slug extends AbstractField
      */
     protected function getLinkElement()
     {
-        if( !$this->hasUriToSlug() )
-        {
+        if (!$this->hasUriToSlug()) {
             return null;
         }
 
-        return Html::div(
+        return Html::small(
             Html::link(
                 $this->getLinkValue()
-            )->addAttributes( [ 'href' => $this->getLinkHref() ] )
-        )->addClass( 'link' );
+            )->addAttributes(['href' => $this->getLinkHref()])
+        )->addClass('form-text text-muted');
     }
 
     /**
@@ -92,17 +94,17 @@ class Slug extends AbstractField
      */
     protected function getLinkValue()
     {
-        $urlToSlug = ltrim($this->getUriToSlug(), "/");
-        $urlToSlugElement = Html::span( $urlToSlug );
+        $urlToSlug = ltrim($this->getUriToSlug(), '/');
+        $urlToSlugElement = Html::span($urlToSlug);
 
         return [
-            [
-                url( '/' ),
+            new HtmlString(implode('', [
+                url('/'),
                 '/',
-                $urlToSlugElement,
-                ( $urlToSlug ) ? '/' : ''
-            ],
-            Html::span( $this->getValue() )
+                (string)$urlToSlugElement,
+                ($urlToSlug) ? '/' : '',
+                Html::span($this->getValue())
+            ])),
         ];
     }
 
@@ -113,12 +115,11 @@ class Slug extends AbstractField
     {
         $urlToSlug = $this->getUriToSlug();
 
-        if( $urlToSlug )
-        {
+        if ($urlToSlug) {
             $urlToSlug .= '/';
         }
 
-        return url( '/' ) . '/' . $urlToSlug . $this->getValue();
+        return url('/') . '/' . $urlToSlug . $this->getValue();
     }
 
     /**
@@ -134,11 +135,11 @@ class Slug extends AbstractField
      */
     protected function getUriToExistingModel()
     {
-        $uriParts = explode( '/', $this->getUri() );
+        $uriParts = explode('/', $this->getUri());
 
-        array_pop( $uriParts );
+        array_pop($uriParts);
 
-        return implode( '/', $uriParts );
+        return implode('/', $uriParts);
     }
 
     /**
@@ -150,9 +151,9 @@ class Slug extends AbstractField
          * @var Node $parentNode
          */
         $repository = new NodesRepository;
-        $parentNode = $repository->find( $this->getParentId() );
+        $parentNode = $repository->find($this->getParentId());
 
-        return $parentNode ? $parentNode->getUri() : (string) null;
+        return $parentNode ? $parentNode->getUri() : (string)null;
     }
 
     /**
@@ -160,8 +161,7 @@ class Slug extends AbstractField
      */
     protected function getUriToSlug()
     {
-        if( !$this->getModel() instanceof Node )
-        {
+        if (!$this->getModel() instanceof Node) {
             return false;
         }
 
@@ -183,12 +183,11 @@ class Slug extends AbstractField
     {
         $model = $this->getModel();
 
-        if( $model instanceof Node )
-        {
+        if ($model instanceof Node) {
             return $this->getModel()->getParentId();
         }
 
-        return request( 'parent_id' );
+        return request('parent_id');
     }
 
     /**

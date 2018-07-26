@@ -3,9 +3,9 @@
 namespace Arbory\Base\Admin\Form\Fields;
 
 use Arbory\Base\Admin\Form\FieldSet;
+use Arbory\Base\Admin\Traits\Renderable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 
 /**
  * Class AbstractField
@@ -13,6 +13,8 @@ use Illuminate\View\View;
  */
 abstract class AbstractField implements FieldInterface
 {
+    use Renderable;
+
     /**
      * @var string
      */
@@ -45,6 +47,15 @@ abstract class AbstractField implements FieldInterface
     public function __construct( $name )
     {
         $this->setName( $name );
+        $this->setup();
+    }
+
+    /**
+     * @return void
+     */
+    protected function setup()
+    {
+
     }
 
     /**
@@ -198,10 +209,4 @@ abstract class AbstractField implements FieldInterface
     {
 
     }
-
-    /**
-     * @return View
-     */
-    abstract public function render();
-
 }

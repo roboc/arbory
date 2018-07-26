@@ -1,22 +1,17 @@
-jQuery(document).ready( function()
-{
+jQuery(document).ready(function () {
     var body = jQuery('body');
 
-    body.on('contentreplace', function(e, content, selector)
-    {
-        if ((content) && ('status' in content) && ('getResponseHeader' in content))
-        {
+    body.on('contentreplace', function (e, content, selector) {
+        if ((content) && ('status' in content) && ('getResponseHeader' in content)) {
             // use content only if the response has valid 200 and html content type
             var status = content.status;
-            if (status !== 200)
-            {
+            if (status !== 200) {
                 return;
             }
 
             var content_type = content.getResponseHeader("content-type");
 
-            if (!content_type || !content_type.match(/html/))
-            {
+            if (!content_type || !content_type.match(/html/)) {
                 return;
             }
 
@@ -25,14 +20,12 @@ jQuery(document).ready( function()
 
         var new_node;
 
-        if (typeof selector !== 'undefined')
-        {
+        if (typeof selector !== 'undefined') {
             // selector given, find matching node in given content
-            content = jQuery('<html />').append( content );
-            new_node = content.find( selector );
+            content = jQuery('<html />').append(content);
+            new_node = content.find(selector);
         }
-        else
-        {
+        else {
             // no selector given, whole content is the new node
             new_node = content;
         }
@@ -41,16 +34,14 @@ jQuery(document).ready( function()
         // old_node defaults to event target if no selector given
         var old_node = jQuery(e.target);
 
-        if (typeof selector !== 'undefined')
-        {
+        if (typeof selector !== 'undefined') {
             // but matches self or descendants if selector is given
-            if (!old_node.is( selector ))
-            {
-                old_node = old_node.find( selector );
+            if (!old_node.is(selector)) {
+                old_node = old_node.find(selector);
             }
         }
 
-        old_node.replaceWith( new_node );
+        old_node.replaceWith(new_node);
 
         new_node.trigger('contentloaded');
 
@@ -58,8 +49,7 @@ jQuery(document).ready( function()
 
     // use setTimeout to trigger this after all scripts have been loaded
     // and attached their initial handlers for this event
-    setTimeout( function()
-    {
+    setTimeout(function () {
         body.trigger('contentloaded');
         body.trigger('contentdone');
     }, 0);

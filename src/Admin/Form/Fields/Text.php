@@ -10,11 +10,8 @@ use Arbory\Base\Html\Elements\Element;
  */
 class Text extends AbstractField
 {
-    /**
-     * @return Element
-     */
-    public function render()
+    protected function setup()
     {
-        return ( new Renderer\InputFieldRenderer( $this ) )->render();
+        $this->setRenderer(new Renderer\InputFieldRenderer($this));
     }
 }

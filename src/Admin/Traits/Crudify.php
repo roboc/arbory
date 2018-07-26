@@ -9,6 +9,7 @@ use Arbory\Base\Admin\Grid\ExportBuilder;
 use Arbory\Base\Admin\Layout;
 use Arbory\Base\Admin\Module;
 use Arbory\Base\Admin\Tools\ToolboxMenu;
+use Arbory\Base\Html\Html;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -84,21 +85,30 @@ trait Crudify
         $grid->setModule($this->module());
         $grid->setRenderer(new Grid\Builder($grid));
 
+        $grid->rowActions(function (ToolboxMenu $toolBox) {
+            $model = $toolBox->model();
+
+            $toolBox->add('edit', $this->url('edit', $model->getKey()));
+            $toolBox->add('delete',
+                $this->url('dialog', ['dialog' => 'confirm_delete', 'id' => $model->getKey()])
+            )->dialog()->danger();
+        });
+
         return $this->grid($grid);
     }
 
     /**
-     * @return Layout
+     * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
     {
-        $layout = new Layout(function (Layout $layout) {
-            $layout->body($this->buildGrid($this->resource()));
-        });
+        $variables = [
+            'bodyClass' => 'controller-' . str_slug($this->module()->name()) . ' view-index',
+            'breadcrumb' => $this->module()->breadcrumbs(),
+            'content' => $this->buildGrid($this->resource()),
+        ];
 
-        $layout->bodyClass('controller-' . str_slug($this->module()->name()) . ' view-index');
-
-        return $layout;
+        return view('arbory::controllers.resource.index', $variables);
     }
 
     /**
@@ -115,13 +125,13 @@ trait Crudify
      */
     public function create()
     {
-        $layout = new Layout(function (Layout $layout) {
-            $layout->body($this->buildForm($this->resource()));
-        });
+        $variables = [
+            'bodyClass' => 'controller-' . str_slug($this->module()->name()) . ' view-edit',
+            'breadcrumb' => $this->module()->breadcrumbs(),
+            'content' => $this->buildForm($this->resource())->render(),
+        ];
 
-        $layout->bodyClass('controller-' . str_slug($this->module()->name()) . ' view-edit');
-
-        return $layout;
+        return view('arbory::controllers.resource.form', $variables);
     }
 
     /**
@@ -152,14 +162,15 @@ trait Crudify
     public function edit($resourceId)
     {
         $resource = $this->findOrNew($resourceId);
+        $breadcrumb = $this->module()->breadcrumbs();
 
-        $layout = new Layout(function (Layout $layout) use ($resource) {
-            $layout->body($this->buildForm($resource));
-        });
+        $variables = [
+            'bodyClass' => 'controller-' . str_slug($this->module()->name()) . ' view-edit',
+            'breadcrumb' => $breadcrumb,
+            'content' => $this->buildForm($resource)->render(),
+        ];
 
-        $layout->bodyClass('controller-' . str_slug($this->module()->name()) . ' view-edit');
-
-        return $layout;
+        return view('arbory::controllers.resource.form', $variables);
     }
 
     /**

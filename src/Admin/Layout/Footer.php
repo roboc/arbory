@@ -27,9 +27,8 @@ class Footer implements Renderable
      * Footer constructor.
      * @param string|null $type
      */
-    public function __construct( $type = null )
+    public function __construct()
     {
-        $this->type = $type;
         $this->rows = new Collection();
     }
 
@@ -56,16 +55,11 @@ class Footer implements Renderable
      */
     public function render()
     {
-        $footer = Html::footer();
+        $footer = Html::div();
 
         foreach( $this->getRows() as $row )
         {
             $footer->append( $row->render() );
-        }
-
-        if( $this->type )
-        {
-            $footer->addClass( $this->type );
         }
 
         return $footer;

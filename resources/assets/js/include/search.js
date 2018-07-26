@@ -1,4 +1,3 @@
-/* global UrlBuilder */
 
 jQuery(function () {
     'use strict';
@@ -16,8 +15,8 @@ jQuery(function () {
         var defaults = {
             result_blocks: {
                 main_section: {
-                    result_selector : 'section',
-                    target : 'main > section:first'
+                    result_selector : '#resources-grid',
+                    target : '#resources-grid'
                 }
             },
             rebind: false
@@ -67,20 +66,25 @@ jQuery(function () {
             timeout = setTimeout(function () {
                 elements.submit.trigger('loadingstart');
 
+                var parameters = {};
+
+                form.serializeArray().forEach(function( item){
+                    parameters[item.name] = item.value;
+                });
+
                 // Construct url.
                 var form_url = form.attr('action');
-                var url = new UrlBuilder({ baseUrl: form_url });
-                url.add(form.serializeArray());
+                var url = buildUrl(form_url, {
+                    queryParams: parameters
+                });
 
                 if ('replaceState' in window.history) {
-                    window.history.replaceState(window.history.state, window.title, url.getUrl());
+                    window.history.replaceState(window.history.state, window.title, url);
                 }
-
-                url.add({ ajax: 1 });
 
                 // Send request.
                 request = jQuery.ajax({
-                    url: url.getUrl(),
+                    url: url,
                     success: function (response) {
                         form.trigger('searchresponse', response);
                         form.trigger('searchend');
