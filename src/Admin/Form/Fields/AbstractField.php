@@ -2,6 +2,7 @@
 
 namespace Arbory\Base\Admin\Form\Fields;
 
+use Arbory\Base\Admin\Form\Fields\Concerns\IsTranslatable;
 use Arbory\Base\Admin\Form\FieldSet;
 use Arbory\Base\Admin\Traits\Renderable;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +15,7 @@ use Illuminate\Http\Request;
 abstract class AbstractField implements FieldInterface
 {
     use Renderable;
+    use IsTranslatable;
 
     /**
      * @var string
